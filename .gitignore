@@ -10,6 +10,9 @@ build/
 .env.local
 .env.*.local
 
+backend/src/data/*.csv
+
+
 # Logs
 npm-debug.log*
 yarn-debug.log*
