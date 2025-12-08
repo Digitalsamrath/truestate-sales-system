@@ -10,7 +10,10 @@ build/
 .env.local
 .env.*.local
 
+# Ignore large datasets
 backend/src/data/*.csv
+!backend/src/data/sample_*.csv
+
 
 
 # Logs
