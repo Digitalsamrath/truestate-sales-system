@@ -2,20 +2,25 @@ const salesService = require('../services/sales.service');
 
 async function getSales(req, res) {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const search = req.query.search || '';
-    const limit = 10;
-
-    const data = await salesService.getSalesPage({
-      page,
-      limit,
-      search,
+    const data = await salesService.getSales({
+      page: req.query.page,
+      search: req.query.search,
+      region: req.query.region,
+      gender: req.query.gender,
+      ageMin: req.query.ageMin,
+      ageMax: req.query.ageMax,
+      category: req.query.category,
+      tags: req.query.tags,
+      payment: req.query.payment,
+      dateFrom: req.query.dateFrom,
+      dateTo: req.query.dateTo,
+      sortBy: req.query.sortBy, // 'date' | 'quantity' | 'customerName'
     });
 
     res.json(data);
   } catch (err) {
     res.status(500).json({
-      message: 'Failed to load sales data',
+      message: 'Failed to fetch sales data',
       error: err.message,
     });
   }
