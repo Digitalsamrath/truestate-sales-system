@@ -1,33 +1,42 @@
-import { useEffect, useState } from 'react';
+import Sidebar from './layout/Sidebar';
+import Header from './layout/Header';
+import FilterPanel from './components/FilterPanel';
+import StatCards from './components/StatCards';
+import TransactionTable from './components/TransactionTable';
+import Pagination from './components/Pagination';
+import { useSales } from './hooks/useSales';
 
 function App() {
-  const [sales, setSales] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch('https://truestate-sales-system.onrender.com/api/sales')
-      .then(res => res.json())
-      .then(data => {
-        setSales(data.results || []);
-        setLoading(false);
-      });
-  }, []);
+  const {
+    data,
+    page,
+    total,
+    setPage,
+    setSearch,
+    setFilters,
+  } = useSales();
 
   return (
-    <div style={{ padding: 24, fontFamily: 'Arial' }}>
-      <h1>Retail Sales Management System</h1>
+    <div className="app">
+      <Sidebar />
 
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <ul>
-          {sales.map((item, index) => (
-            <li key={index}>
-              {item.customerName} — {item.productName} — ₹{item.finalAmount}
-            </li>
-          ))}
-        </ul>
-      )}
+      <main>
+        <Header onSearch={setSearch} />
+        <FilterPanel onApply={(filters) => {
+          setPage(1);
+          setFilters(filters);
+}} />
+        <StatCards />
+        <TransactionTable data={data} />
+
+        <Pagination
+          page={page}
+          total={total}
+          pageSize={10}
+          onPrev={() => setPage(page - 1)}
+          onNext={() => setPage(page + 1)}
+        />
+      </main>
     </div>
   );
 }
